@@ -3,6 +3,11 @@
  */
 package nimigeneraattori;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Random;
 
 /**
@@ -20,92 +25,83 @@ public class Generaattori {
 	 * @param pituus nimen haluttu pituus
 	 * @return generoitu nimi
 	 */
-	public static StringBuilder generoiNimi(String[] vokaalit, String[] konsonantit, int pituus) {
-		String[] aakkoset = {"a", "u", "e", "i", "o", "y", "b", "c", "d",
-							"f", "g", "h", "j", "k", "l", "m", "n", "p", 
-							"q", "r", "s", "t", "v", "w", "x", "z"};
+	public static String generoiNimi(ArrayList<String> vokaalit, ArrayList<String> konsonantit, int pituus) {
+		ArrayList<String> aakkoset = new ArrayList<String> (Arrays.asList("a", "u", "e", "i", "o", "y", "b", 
+				"c", "d", "f", "g", "h", "j", "k", "l", "m", "n", "p", "q", "r", "s", "t", "v", "w", "x", "z"));
 		StringBuilder nimi = new StringBuilder("");
+		//boolean onkoVokaali = false;
+		//boolean onkoKonsonantti = false;
+		int kasiteltavaKirjain = 0;
 		
-		
+		//Valitseen randomilla nimen ensimm√§iseksi kirjaimeksi vokaalin tai konsonantin.
 		Random random = new Random();
-		nimi.append(aakkoset[random.nextInt(aakkoset.length)]);
+		if (random.nextInt(0, 10) < 5)
+			nimi.append(vokaalit.get(random.nextInt(vokaalit.size()-1)));
+		else
+			nimi.append(konsonantit.get(random.nextInt(konsonantit.size()-1)));
 		
-		for(int i = 0; i < vokaalit.length; i++) {
-			if(nimi.toString() == vokaalit[i]) {
-				nimi.append(aakkoset[random.nextInt(aakkoset.length)]);
-				break;
+
+		//Jos alkukirjain on vokaali, niin silloin toiseksi kirjaimeksi voi laittaa mink√§ tahansa kirjaimen.
+		if (vokaalit.contains(Character.toString(nimi.charAt(kasiteltavaKirjain))) == true)
+			nimi.append(aakkoset.get(random.nextInt(aakkoset.size()-1)));
+		else 
+			nimi.append(vokaalit.get(random.nextInt(vokaalit.size()-1)));
+		
+
+		kasiteltavaKirjain++;
+		
+		
+		while(kasiteltavaKirjain < pituus-1) {
+			if (vokaalit.contains(Character.toString(nimi.charAt(kasiteltavaKirjain))) == true) {
+				nimi.append(konsonantit.get(random.nextInt(konsonantit.size()-1)));
 			}
+			if (konsonantit.contains(Character.toString(nimi.charAt(kasiteltavaKirjain))) == true) {
+				nimi.append(vokaalit.get(random.nextInt(vokaalit.size()-1)));
+			}
+			kasiteltavaKirjain++;
 		}
 		
-		nimi.append(vokaalit[random.nextInt(vokaalit.length)]);
+		String alkukirjain = Character.toString(nimi.charAt(0));
+		String generoituNimi = alkukirjain.toUpperCase() + nimi.substring(1, pituus);
 		
-		
-		boolean onkoVokaali = false;
-		boolean onkoKonsonantti = false;
-		int i = 2;
-		while(nimi.length() <= pituus) {
-			if (onkoVokaali(vokaalit, Character.toString(nimi.charAt(i-2))) == true) {
-				if (onkoVokaali(vokaalit, Character.toString(nimi.charAt(i-1))) == true) {
-					nimi.append(aakkoset[random.nextInt(aakkoset.length)]);
-				}
-			}
-			
-			break;
-		}
-		
-		
-		return nimi;
+		return generoituNimi;
 	}
 	
 	
 	/**
-	 * Tarkistaa onko aliohjelmalle parametrina tuotu kirjain vokaali
-	 * @param vokaalit vokaalien lista
-	 * @param kirjain kirjain joka pit‰‰ tarkistaa
-	 * @return totuusarvo, onko kirjain vokaali vai ei
+	 * Kysyy k√§ytt√§j√§lt√§ kuinka pitk√§n nimen h√§n haluaa generoida.
+	 * @return genroitavan nimen pituus
 	 */
-	public static boolean onkoVokaali(String[] vokaalit, String kirjain) {
-		boolean onkoVokaali = false;
-		for(int i = 0; i < vokaalit.length; i++) {
-			if(kirjain == vokaalit[i]) {
-				onkoVokaali = true;
-				break;
-			}
+	public static int kysyPituus() {
+		int pituus = 0;
+		System.out.println("Anna numero valilta 4-7:");
+		
+		BufferedReader lukija = new BufferedReader(new InputStreamReader(System.in));
+		try {
+			pituus = Integer.parseInt(lukija.readLine());
+		} catch (NumberFormatException e) {
+			System.out.println("Virhe!");
+			e.printStackTrace();
+		} catch (IOException e) {
+			System.out.println("Virhe!");
+			e.printStackTrace();
 		}
-		return onkoVokaali;
+		
+		return pituus;
 	}
 	
-	
-	/**
-	 * Tarkistaa onko aliohjelmalle parametrina tuotu kirjain konsonantit
-	 * @param konsonantit konsonanttien lista
-	 * @param kirjain kirjain joka pit‰‰ tarkistaa
-	 * @return totuusarvo, onko kirjain konsonantti vai ei
-	 */
-	public static boolean onkoKonsonantti(String[] konsonantit, String kirjain) {
-		boolean onkoKonsonantti = false;
-		for(int i = 0; i < konsonantit.length; i++) {
-			if(kirjain == konsonantit[i]) {
-				onkoKonsonantti = true;
-				break;
-			}
-		}
-		return onkoKonsonantti;
-	}
-	
-	//Testimuutos
 
 	/**
-	 * @param args ei k‰ytˆss‰
+	 * @param args ei kaytossa
 	 */
 	public static void main(String[] args) {
-		String[] vokaalit = {"a", "u", "e", "i", "o", "y"};
-		String[] konsonantit = {"b", "c", "d", "f", "g", "h", "j", "k", 
-								"l", "m", "n", "p", "q", "r", "s", "t", 
-								"v", "w", "x", "z"};
-		int pituus = 5;
+		ArrayList<String> vokaalit = new ArrayList<String> (Arrays.asList("a", "u", "e", "i", "o", "y"));
+		ArrayList<String> konsonantit = new ArrayList<String> (Arrays.asList("b", "c", "d", "f", "g", "h", 
+				"j", "k", "l", "m", "n", "p", "q", "r", "s", "t", "v", "w", "x", "z"));
 		
-		StringBuilder nimi = new StringBuilder(generoiNimi(vokaalit, konsonantit, pituus));
+		int pituus = kysyPituus();
+		
+		String nimi = generoiNimi(vokaalit, konsonantit, pituus);
 		System.out.println(nimi);
 	}
 

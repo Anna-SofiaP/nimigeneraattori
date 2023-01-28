@@ -11,14 +11,27 @@ import java.util.Arrays;
 import java.util.Random;
 
 /**
- * @author Ansku ja Nea
- * @version 17.11.22
+ * Nimigeneraattoriohjelma
+ * 
+ * Generoi uusia, keksittyä nimiä sattumanvaraisesti valittujen vokaalien ja konsonanttien avulla.
+ * Sisältää kaksi eri generoiNimi-aliohjelmaa (generoiNimi ja generoiNimi2), jotka generoivat nimiä
+ * hieman toisistaan eroavien sääntöjen mukaisesti.
+ * 
+ * kysyPituus-aliohjelma kysyy ensin käyttäjältä, kuinka pitkän nimen hän haluaa ohjelman generoivan.
+ * Sen jälkeen ohjelma generoi generoiNimi-aliohjelman mukaisen nimen ja tulostaa sen.
+ * Seuraavaksi kysyPituus-aliohjelma kysyy uudestaan käyttäjältä halutun nimen pituutta.
+ * Tämän jälkeen ohjelma generoi generoiNimi2-aliohjelman mukaisen nimen ja tulostaa sen.
+ * Molempien generoiNimi-aliohjelmien alussa valitaan nimen ensimmäinen ja toinen kirjain erikseen
+ * aliohjelman ekaJaTokaKirjain avulla.
+ * 
+ * @author Anna-Sofia Paavonen ja Nea Aho-Mantila
+ * @version 28.1.2023
  *
  */
 public class Generaattori {
 	
 	/**
-	 * Generoi keksityn, randomin nimen annetun vokaalilistan, konsonanttilistan ja
+	 * Generoi keksityn, satunnaisen nimen annetun vokaalilistan, konsonanttilistan ja
 	 * nimen pituuden perusteella
 	 * 
 	 * Tämä aliohjelma generoi nimiä, jossa joka toinen kirjain on konsonantti ja joka toinen
@@ -56,7 +69,7 @@ public class Generaattori {
 	
 	
 	/**
-	 * Generoi toisenlaisen keksityn, randomin nimen annetun vokaalilistan, konsonanttilistan ja
+	 * Generoi toisenlaisen keksityn, satunnaisen nimen annetun vokaalilistan, konsonanttilistan ja
 	 * nimen pituuden perusteella.
 	 * 
 	 * Tämä aliohjelma generoi nimiä, jossa voi olla kaksi konsonanttia peräkkäin (muttei kolme!).
@@ -112,7 +125,7 @@ public class Generaattori {
 		ArrayList<String> aakkoset = new ArrayList<String> (Arrays.asList("a", "u", "e", "i", "o", "y", "b", 
 				"c", "d", "f", "g", "h", "j", "k", "l", "m", "n", "p", "q", "r", "s", "t", "v", "w", "x", "z"));
 		
-		//Valitsee randomilla nimen ensimmäiseksi kirjaimeksi vokaalin tai konsonantin.
+		//Valitsee sattumanvaraisesti nimen ensimmäiseksi kirjaimeksi vokaalin tai konsonantin.
 		Random random = new Random();
 		if (random.nextInt(0, 10) < 5)
 			nimi.append(vokaalit.get(random.nextInt(vokaalit.size()-1)));
@@ -130,7 +143,7 @@ public class Generaattori {
 	}
 	
 	
-	/**cd ..\
+	/**
 	 * Kysyy käyttäjältä kuinka pitkän nimen hän haluaa generoida.
 	 * @return genroitavan nimen pituus
 	 */
@@ -154,6 +167,8 @@ public class Generaattori {
 	
 
 	/**
+	 * Pääohjelma
+	 * Sisältää vokaalien ja konsonanttien listat.
 	 * @param args ei kaytossa
 	 */
 	public static void main(String[] args) {
